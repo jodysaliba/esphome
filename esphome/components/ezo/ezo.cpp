@@ -10,6 +10,8 @@ static const char *const TAG = "ezo.sensor";
 static const uint16_t EZO_STATE_WAIT = 1;
 static const uint16_t EZO_STATE_SEND_TEMP = 2;
 static const uint16_t EZO_STATE_WAIT_TEMP = 4;
+static const uint16_t EZO_STATE_SEND_CMD = 8;
+static const uint16_t EZO_STATE_WAIT_CMD = 16;
 
 void EZOSensor::dump_config() {
   LOG_SENSOR("", "EZO", this);
@@ -43,6 +45,14 @@ void EZOSensor::loop() {
     }
     return;
   }
+  // begin send command
+  if (!(this->state_ & EZO_STATE_SEND_CMD)) {
+      int len = sprintf((char *) buf, "%s", this->command_);
+      this->write(buf, len);
+      this->state_ = EZO_STATE_WAIT | EZO_STATE_WAIT_CMD;
+      this->start_time_ = millis();
+      this->wait_time_ = 300;
+  } // end send command
   if (millis() - this->start_time_ < this->wait_time_)
     return;
   buf[0] = 0;
@@ -86,6 +96,11 @@ void EZOSensor::loop() {
 void EZOSensor::set_tempcomp_value(float temp) {
   this->tempcomp_ = temp;
   this->state_ |= EZO_STATE_SEND_TEMP;
+}
+
+void EZOSensor::send_command(char *cmd) {
+  this->command_ = cmd;
+  this->state_ |= EZO_STATE_SEND_CMD;
 }
 
 }  // namespace ezo
