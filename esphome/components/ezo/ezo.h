@@ -17,11 +17,15 @@ class EZOSensor : public sensor::Sensor, public PollingComponent, public i2c::I2
 
   void set_tempcomp_value(float temp);
 
+  // Below are my custom additions to this component
+  void send_command(char *cmd); // command to pass to the EZO device
+
  protected:
   uint32_t start_time_ = 0;
   uint32_t wait_time_ = 0;
   uint16_t state_ = 0;
   float tempcomp_;
+  char *command_;
 };
 
 }  // namespace ezo
