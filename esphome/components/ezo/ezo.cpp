@@ -46,12 +46,15 @@ void EZOSensor::loop() {
     return;
   }
   // begin send command
-  if (!(this->state_ & EZO_STATE_SEND_CMD)) {
-      int len = sprintf((char *) buf, "%s", this->command_);
-      this->write(buf, len);
-      this->state_ = EZO_STATE_WAIT | EZO_STATE_WAIT_CMD;
-      this->start_time_ = millis();
-      this->wait_time_ = 300;
+  if (!(this->state_ & EZO_STATE_WAIT)) {
+    if (this->state_ & EZO_STATE_SEND_CMD) {
+        int len = sprintf((char *) buf, "%s", this->command_);
+        this->write(buf, len);
+        this->state_ = EZO_STATE_WAIT | EZO_STATE_WAIT_CMD;
+        this->start_time_ = millis();
+        this->wait_time_ = 300;
+    }
+    return;
   } // end send command
   if (millis() - this->start_time_ < this->wait_time_)
     return;
