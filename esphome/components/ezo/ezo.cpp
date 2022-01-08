@@ -36,17 +36,15 @@ void EZOSensor::update() {
 void EZOSensor::loop() {
   uint8_t buf[21];
   if (!(this->state_ & EZO_STATE_WAIT)) {
+    // begin temperature compensation command
     if (this->state_ & EZO_STATE_SEND_TEMP) {
       int len = sprintf((char *) buf, "T,%0.3f", this->tempcomp_);
       this->write(buf, len);
       this->state_ = EZO_STATE_WAIT | EZO_STATE_WAIT_TEMP;
       this->start_time_ = millis();
       this->wait_time_ = 300;
-    }
-    return;
-  }
-  // begin send command
-  if (!(this->state_ & EZO_STATE_WAIT)) {
+    } // end temperature compensation command
+    // begin send command
     if (this->state_ & EZO_STATE_SEND_CMD) {
         int len = sprintf((char *) buf, "%s", this->command_);
         this->write(buf, len);
