@@ -99,8 +99,8 @@ void EZOSensor::set_tempcomp_value(float temp) {
   this->state_ |= EZO_STATE_SEND_TEMP;
 }
 
-void EZOSensor::send_command(char *cmd) {
-  this->command_ = cmd;
+void EZOSensor::send_command(std::string &cmd) {
+  this->command_ = const_cast<char*>(cmd.c_str()); // cast input string to char*
   this->state_ |= EZO_STATE_SEND_CMD;
 }
 
