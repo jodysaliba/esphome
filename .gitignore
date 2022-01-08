@@ -127,3 +127,6 @@ tests/.esphome/
 
 sdkconfig.*
 !sdkconfig.defaults
+
+#vs-code
+*.code-workspace
