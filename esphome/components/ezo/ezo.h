@@ -25,7 +25,6 @@ class EZOSensor : public sensor::Sensor, public PollingComponent, public i2c::I2
   uint32_t wait_time_ = 0;
   uint16_t state_ = 0;
   float tempcomp_;
-  //char *command_;
   const char *command_;
 };
 

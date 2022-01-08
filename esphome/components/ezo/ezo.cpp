@@ -100,12 +100,8 @@ void EZOSensor::set_tempcomp_value(float temp) {
 }
 
 void EZOSensor::send_command(std::string &cmd) {
-  // set to std:string and then to char*
-  //std::string temp_str = cmd;
-  //this->command_ = temp_str.data();
-  this->command_ = cmd.c_str();
-  // log the command
-  ESP_LOGE(TAG, "sending command to device: %s", cmd.c_str());
+  this->command_ = cmd.c_str(); // store const char * of input string into command_
+  ESP_LOGE(TAG, "sending command to device: %s", this->command_); // log the command
   this->state_ |= EZO_STATE_SEND_CMD;
 }
 
