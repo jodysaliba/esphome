@@ -50,7 +50,11 @@ void EZOSensor::loop() {
         this->write(buf, len);
         this->state_ = EZO_STATE_WAIT | EZO_STATE_WAIT_CMD;
         this->start_time_ = millis();
-        this->wait_time_ = 300;
+        if (this->command_[0] == 'C' || this->command_[0] == 'R' ) {
+          this->wait_time_ = 1400;  // If calibrating or reading, set wait time to 1400ms
+        } else {
+          this->wait_time_ = 300; // all other commands get wait time of 300ms
+        }
     }
     return;
   } // end send command
